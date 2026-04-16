@@ -12,7 +12,7 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__, static_folder="public", static_url_path="")
 
 BASE_DIR = Path(__file__).resolve().parent
-STATIC_DIR = BASE_DIR / "static"
+STATIC_DIR = Path(app.static_folder)
 STATIC_GEOJSON = STATIC_DIR / "INDIA_DISTRICTS.geojson"
 CROP_HISTORY_PATH = BASE_DIR / "data" / "crop_production.csv"
 MARKET_HISTORY_PATH = BASE_DIR / "data" / "Marketwise_Price_Arrival_09-02-2026_07-49-39_PM.csv"
