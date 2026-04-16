@@ -6,4 +6,4 @@ __pycache__/
 crop_model.pkl
 
 # The enriched GeoJSON already lives in static/.
-INDIA_DISTRICTS.geojson
+/INDIA_DISTRICTS.geojson

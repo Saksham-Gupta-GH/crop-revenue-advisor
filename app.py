@@ -9,7 +9,7 @@ import pandas as pd
 from flask import Flask, jsonify, render_template, request
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="public", static_url_path="")
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"

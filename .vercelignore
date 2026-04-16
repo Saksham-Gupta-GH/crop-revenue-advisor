@@ -15,4 +15,4 @@ profit_model.pkl
 model_columns.pkl
 encoders.pkl
 crop_model.pkl
-INDIA_DISTRICTS.geojson
+/INDIA_DISTRICTS.geojson
