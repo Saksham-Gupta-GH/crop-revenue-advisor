@@ -1,0 +1,9 @@
+.DS_Store
+__pycache__/
+.venv/
+
+# Keep the compressed runtime model in git; the original blob is too large for GitHub.
+crop_model.pkl
+
+# The enriched GeoJSON already lives in static/.
+INDIA_DISTRICTS.geojson

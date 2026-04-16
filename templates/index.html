@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+    <body>
+    <details class="about-panel">
+        <summary>About</summary>
+        <div class="about-card">
+            <h3>What AgriSmart Does</h3>
+            <p>
+                AgriSmart uses your saved ML models to recommend crops and estimate expected revenue.
+                It supports map-based district selection, manual district entry, and fallback predictions
+                when a district is not directly covered by the model.
+            </p>
+        </div>
+    </details>
+
+    <nav class="navbar">
+        <div class="brand-wrap">
+            <div class="brand-mark">A</div>
+            <div class="brand">AgriSmart</div>
+        </div>
+        <a class="nav-link" href="/">Home</a>
+    </nav>
+
+    <main class="page-shell">
+        <section class="hero-copy">
+            <span class="eyebrow">Crop recommendation and revenue forecast</span>
+            <h1>Choose a district, enter your area, and get a clear recommendation instantly.</h1>
+            <p>
+                AgriSmart uses your trained ML models to recommend a crop and estimate
+                expected revenue per hectare for the selected district and season.
+            </p>
+        </section>
+
+        <section class="layout">
+            <div class="card map-card">
+                <div class="section-head">
+                    <div>
+                        <h2>Interactive India Map</h2>
+                        <p>Hover to explore and click a district to select it.</p>
+                    </div>
+                    <span class="status-pill" id="map-status">Loading map...</span>
+                </div>
+
+                <div class="selected-location" id="selected-location">
+                    No district selected yet
+                </div>
+
+                <div id="map"></div>
+
+                <p class="helper-text">
+                    The map shows all districts in the GeoJSON file. Predictions are available only
+                    for locations included in the trained model.
+                </p>
+            </div>
+
+            <aside class="card side-card">
+                <div class="panel-section">
+                    <div class="section-head compact">
+                        <div>
+                            <h2>Prediction Inputs</h2>
+                            <p>Pick from the map or type the district manually using your model's district names.</p>
+                        </div>
+                    </div>
+
+                    <label for="state">State</label>
+                    <select id="state"></select>
+
+                    <label for="district">District</label>
+                    <input id="district" list="district-options" type="text" placeholder="Type district name">
+                    <datalist id="district-options"></datalist>
+                    <p class="field-hint" id="district-hint">
+                        Click a district on the map to auto-fill the nearest model district, or type it manually.
+                    </p>
+
+                    <label for="season">Season</label>
+                    <select id="season">
+                        <option value="KHARIF">KHARIF</option>
+                        <option value="RABI">RABI</option>
+                        <option value="ZAID">ZAID</option>
+                    </select>
+
+                    <label for="area">Area (hectares)</label>
+                    <input id="area" type="number" min="0" step="0.1" placeholder="Enter farm area">
+
+                    <button id="predict-btn" type="button">Predict Crop</button>
+                </div>
+
+                <div class="panel-section result-panel">
+                    <div class="section-head compact">
+                        <div>
+                            <h2>Prediction Results</h2>
+                            <p>Your recommendation will appear here after prediction.</p>
+                        </div>
+                    </div>
+
+                    <div class="message-box info" id="result-message">
+                        Select a district on the map and enter the area to get started.
+                    </div>
+
+                    <div class="results-grid hidden" id="results-grid">
+                        <div class="result-card">
+                            <span class="result-label">Recommended Crop</span>
+                            <strong id="crop-result">-</strong>
+                        </div>
+                        <div class="result-card">
+                            <span class="result-label">Revenue per hectare</span>
+                            <strong id="revenue-hectare-result">-</strong>
+                        </div>
+                        <div class="result-card full-width">
+                            <span class="result-label">Total Revenue</span>
+                            <strong id="total-revenue-result">-</strong>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+    ></script>
+    <script id="frontend-config" type="application/json">{{ frontend_config | tojson }}</script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

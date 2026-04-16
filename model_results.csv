@@ -1,0 +1,3 @@
+Model,Metric,Score
+Stacking Classifier,Accuracy,0.8273471959672338
+Gradient Boosting Regressor,R2 Score,0.9941179483696331
