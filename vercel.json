@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "app.py": {
+      "excludeFiles": "{analysis.ipynb,try1.ipynb,train.py,test_model.py,final.py,classification_report.csv,model_results.csv,sample_output.csv,crop_production.csv.zip,model/**,profit_model.pkl,model_columns.pkl,encoders.pkl,INDIA_DISTRICTS.geojson}"
+    }
+  }
+}
