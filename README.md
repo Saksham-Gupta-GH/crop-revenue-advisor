@@ -2,6 +2,8 @@
 
 A machine learning web application that predicts the most suitable crop and estimates expected revenue for a given location, season, and farm area across India. Built with Flask and deployed on Vercel.
 
+Live: https://crop-revenue-advisor.vercel.app/
+
 ---
 
 ## Overview
@@ -175,7 +177,7 @@ Note: The crop classifier (`crop_model.pkl.gz`) was trained separately and is no
 
 ## Deployment
 
-The app is configured for Vercel using a serverless Flask setup. The compressed model file (`crop_model.pkl.gz`) is used at runtime to stay within Vercel's bundle size limits. The uncompressed `crop_model.pkl` is excluded from version control via `.gitignore`.
+The app is live at https://crop-revenue-advisor.vercel.app/ and is configured for Vercel using a serverless Flask setup. The compressed model file (`crop_model.pkl.gz`) is used at runtime to stay within Vercel's bundle size limits. The uncompressed `crop_model.pkl` is excluded from version control via `.gitignore`.
 
 ---
 
