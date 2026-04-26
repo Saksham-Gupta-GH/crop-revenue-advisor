@@ -23,31 +23,31 @@ const currencyFormatter = new Intl.NumberFormat("en-IN", {
 });
 
 const defaultStyle = {
-    color: "rgba(74, 200, 100, 0.55)",
+    color: "#d7ccc0",
     weight: 1,
-    fillColor: "rgba(74, 200, 100, 0.14)",
-    fillOpacity: 1,
+    fillColor: "#f5eee6",
+    fillOpacity: 0.6,
 };
 
 const unsupportedStyle = {
-    color: "rgba(100, 120, 105, 0.35)",
+    color: "#e8e0d5",
     weight: 0.8,
-    fillColor: "rgba(30, 50, 35, 0.3)",
-    fillOpacity: 1,
+    fillColor: "#faf8f3",
+    fillOpacity: 0.4,
 };
 
 const hoverStyle = {
-    color: "rgba(245, 200, 66, 0.85)",
+    color: "#c2410c",
     weight: 1.5,
-    fillColor: "rgba(245, 200, 66, 0.22)",
-    fillOpacity: 1,
+    fillColor: "#fbbf24",
+    fillOpacity: 0.4,
 };
 
 const selectedStyle = {
-    color: "#f5c842",
+    color: "#c2410c",
     weight: 2,
-    fillColor: "rgba(245, 200, 66, 0.35)",
-    fillOpacity: 1,
+    fillColor: "#b45309",
+    fillOpacity: 0.5,
 };
 
 let selectedLayer = null;
@@ -59,7 +59,7 @@ const map = L.map("map", {
     zoomControl: true,
 }).setView([22.5, 79.5], 4.5);
 
-L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
     attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
     maxZoom: 18,
 }).addTo(map);
