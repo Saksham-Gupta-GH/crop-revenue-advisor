@@ -110,6 +110,12 @@ body {
 .btn-filled:hover { background: var(--green-dark); box-shadow: var(--z2); }
 .btn-filled:disabled { opacity: .6; cursor: default; }
 
+/* ── Animations ── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Landing ── */
 .landing-hero {
     min-height: calc(100vh - 64px);
@@ -118,7 +124,11 @@ body {
     justify-content: center;
     text-align: center;
     padding: 64px 24px;
-    background: var(--surface);
+    background-color: var(--surface);
+    background-image:
+        radial-gradient(ellipse 70% 45% at 50% 0%, rgba(230,244,234,0.9) 0%, transparent 65%),
+        radial-gradient(circle, #e8eaed 1px, transparent 1px);
+    background-size: 100% 100%, 28px 28px;
 }
 
 .landing-inner { max-width: 640px; }
@@ -132,43 +142,85 @@ body {
     font-size: 13px;
     font-weight: 500;
     margin-bottom: 28px;
+    border: 1px solid var(--green-100);
+    animation: fadeUp 0.5s ease both;
 }
 
 .landing-h1 {
     margin: 0 0 20px;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 400;
-    letter-spacing: -.02em;
-    line-height: 1.15;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -.025em;
+    line-height: 1.12;
     color: var(--text);
+    animation: fadeUp 0.5s 0.1s ease both;
+}
+
+.landing-h1 em {
+    font-style: normal;
+    color: var(--green);
 }
 
 .landing-sub {
-    margin: 0 0 40px;
+    margin: 0 0 36px;
     font-size: 17px;
     font-weight: 300;
     color: var(--text-2);
     line-height: 1.65;
+    animation: fadeUp 0.5s 0.2s ease both;
 }
 
 .landing-cta {
     display: inline-flex;
     align-items: center;
-    height: 48px;
-    padding: 0 32px;
-    border-radius: 24px;
+    gap: 8px;
+    height: 52px;
+    padding: 0 36px;
+    border-radius: 26px;
     background: var(--green);
     color: #fff;
     font: 500 16px 'Roboto', sans-serif;
     text-decoration: none;
-    box-shadow: var(--z1);
+    box-shadow: 0 2px 8px rgba(30,142,62,.35);
     transition: background var(--t), box-shadow var(--t), transform var(--t);
+    animation: fadeUp 0.5s 0.3s ease both;
 }
 
 .landing-cta:hover {
     background: var(--green-dark);
-    box-shadow: var(--z2);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(30,142,62,.4);
+    transform: translateY(-2px);
+}
+
+.feature-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 36px;
+    animation: fadeUp 0.5s 0.4s ease both;
+}
+
+.feature-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-2);
+    box-shadow: var(--z1);
+}
+
+.feature-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
 }
 
 /* ── App layout ── */
@@ -352,13 +404,21 @@ input::placeholder { color: #9aa0a6; }
 }
 
 .result-tile {
-    background: var(--bg);
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r);
-    padding: 14px;
+    border-left: 3px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0;
+    padding: 14px 16px;
+    transition: box-shadow var(--t);
 }
 
-.result-tile.wide { grid-column: 1 / -1; }
+.result-tile:hover { box-shadow: var(--z1); }
+
+.result-tile.wide {
+    grid-column: 1 / -1;
+    background: var(--green-50);
+    border-left-color: var(--green-dark);
+}
 
 .result-label {
     display: block;
@@ -372,9 +432,10 @@ input::placeholder { color: #9aa0a6; }
 
 .result-value {
     display: block;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 500;
     color: var(--green-dark);
+    letter-spacing: -.01em;
 }
 
 /* Modal */
