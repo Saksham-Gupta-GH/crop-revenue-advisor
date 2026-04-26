@@ -3,51 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart</title>
+    <title>AgriSmart – Crop Revenue Advisor</title>
+    <meta name="description" content="AgriSmart uses machine learning to recommend the most profitable crop for your district, season, and land area.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Landing-page-only overrides */
+        .landing-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 64px;
+            background: transparent;
+        }
+        .landing-wordmark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .landing-wordmark .brand-mark {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: #1a73e8;
+            display: grid; place-items: center;
+            color: #fff; font-size: 15px; font-weight: 700;
+            font-family: 'Google Sans', sans-serif;
+        }
+        .landing-wordmark span {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 18px; font-weight: 500; color: #202124;
+        }
+        .divider-dot {
+            display: inline-block;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: #dadce0;
+            margin: 0 14px;
+            vertical-align: middle;
+        }
+        .landing-feature-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+            color: #5f6368;
+            font-size: 13px;
+        }
+        .landing-feature-row .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid #dadce0;
+            background: #f8f9fa;
+            color: #3c4043;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .landing-feature-row .chip::before {
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body class="landing-body">
+
+    <!-- About panel -->
     <details class="about-panel">
         <summary>About</summary>
         <div class="about-card">
-    <h3>About AgriSmart</h3>
-    <p>
-        AgriSmart is a machine learning-based crop recommendation system that helps users
-        choose the most profitable crop for a given district, season, and land area.
-    </p>
-
-    <p>
-        The system is built using real-world agricultural datasets, including crop production,
-        rainfall statistics, and market price data. These datasets are cleaned, merged, and
-        processed to calculate yield and revenue patterns across India.
-    </p>
-
-    <p>
-        A stacking classification model (Random Forest, Gradient Boosting, and AdaBoost)
-        is used to predict the best crop, while a Gradient Boosting regression model
-        estimates the expected revenue per hectare.
-    </p>
-
-    <p>
-        The trained models are saved and directly used in this application, enabling
-        fast, real-time predictions without retraining.
-    </p>
-</div>
+            <h3>About AgriSmart</h3>
+            <p>
+                AgriSmart is a machine learning-based crop recommendation system that helps users
+                choose the most profitable crop for a given district, season, and land area.
+            </p>
+            <p>
+                Built using real-world agricultural datasets covering crop production, rainfall
+                statistics, and market price data across India.
+            </p>
+            <p>
+                A stacking classifier (Random Forest, Gradient Boosting, AdaBoost) predicts the
+                best crop, while a Gradient Boosting regression model estimates expected revenue.
+            </p>
+        </div>
     </details>
 
+    <!-- Top nav (transparent on landing) -->
+    <nav class="landing-nav">
+        <a class="landing-wordmark" href="/">
+            <div class="brand-mark">A</div>
+            <span>AgriSmart</span>
+        </a>
+    </nav>
+
+    <!-- Hero -->
     <main class="landing-shell">
         <section class="landing-card">
-            <span class="eyebrow">AgriSmart</span>
-            <h1>Smarter crop decisions, built from your trained models.</h1>
+            <span class="eyebrow" style="background:#e8f0fe;border-color:#d2e3fc;color:#1a73e8;">
+                🌾 &nbsp;Powered by ML · Real agricultural data
+            </span>
+
+            <h1>
+                Smarter crop decisions,<br>
+                <strong>built from data.</strong>
+            </h1>
+
             <p>
-                Explore districts on the map, type a district manually, and get a crop recommendation
-                with estimated revenue based on your existing ML pipeline.
+                Select any district on the interactive India map, enter your farm area
+                and season — get an instant crop recommendation with projected revenue,
+                straight from your trained models.
             </p>
-            <a class="landing-button" href="/app">Open AgriSmart</a>
+
+            <!-- Feature chips -->
+            <div class="landing-feature-row">
+                <span class="chip"><span>🗺️</span> Interactive map</span>
+                <span class="divider-dot"></span>
+                <span class="chip"><span>🤖</span> Stacking classifier</span>
+                <span class="divider-dot"></span>
+                <span class="chip"><span>₹</span> Revenue estimate</span>
+            </div>
+
+            <a class="landing-button" href="/app" id="open-app-btn">Open AgriSmart</a>
         </section>
     </main>
+
 </body>
 </html>

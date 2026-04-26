@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart</title>
+    <title>AgriSmart – Crop Advisor</title>
+    <meta name="description" content="Recommend the most profitable crop for any Indian district using trained ML models and real agricultural data.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -15,45 +16,56 @@
     >
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-    <body>
+<body>
+
+    <!-- About panel -->
     <details class="about-panel">
         <summary>About</summary>
         <div class="about-card">
             <h3>What AgriSmart Does</h3>
             <p>
                 AgriSmart uses your saved ML models to recommend crops and estimate expected revenue.
-                It supports map-based district selection, manual district entry, and fallback predictions
-                when a district is not directly covered by the model.
+                It supports map-based district selection, manual district entry, and fallback
+                predictions when a district is not directly covered by the model.
             </p>
         </div>
     </details>
 
-    <nav class="navbar">
+    <!-- Navbar -->
+    <nav class="navbar" id="main-nav">
         <div class="brand-wrap">
             <div class="brand-mark">A</div>
             <div class="brand">AgriSmart</div>
         </div>
-        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/" id="home-link">
+            ← Home
+        </a>
     </nav>
 
+    <!-- Page -->
     <main class="page-shell">
+
+        <!-- Hero copy -->
         <section class="hero-copy">
-            <span class="eyebrow">Crop recommendation and revenue forecast</span>
-            <h1>Choose a district, enter your area, and get a clear recommendation instantly.</h1>
+            <span class="eyebrow">Crop Recommendation &amp; Revenue Forecast</span>
+            <h1>Choose a district, enter your area,<br>get a clear recommendation instantly.</h1>
             <p>
                 AgriSmart uses your trained ML models to recommend a crop and estimate
                 expected revenue per hectare for the selected district and season.
             </p>
         </section>
 
+        <!-- Main layout: map + sidebar -->
         <section class="layout">
+
+            <!-- Map card -->
             <div class="card map-card">
                 <div class="section-head">
                     <div>
                         <h2>Interactive India Map</h2>
-                        <p>Hover to explore and click a district to select it.</p>
+                        <p>Hover to explore · Click a district to select it</p>
                     </div>
-                    <span class="status-pill" id="map-status">Loading map...</span>
+                    <span class="status-pill" id="map-status">Loading map…</span>
                 </div>
 
                 <div class="selected-location" id="selected-location">
@@ -63,17 +75,20 @@
                 <div id="map"></div>
 
                 <p class="helper-text">
-                    The map shows all districts in the GeoJSON file. Predictions are available only
-                    for locations included in the trained model.
+                    Districts shown in colour are supported by the trained model.
+                    Greyed-out districts fall back to the nearest supported district.
                 </p>
             </div>
 
+            <!-- Sidebar -->
             <aside class="card side-card">
+
+                <!-- Inputs section -->
                 <div class="panel-section">
                     <div class="section-head compact">
                         <div>
                             <h2>Prediction Inputs</h2>
-                            <p>Pick from the map or type the district manually using your model's district names.</p>
+                            <p>Pick from the map or type the district manually.</p>
                         </div>
                     </div>
 
@@ -81,10 +96,10 @@
                     <select id="state"></select>
 
                     <label for="district">District</label>
-                    <input id="district" list="district-options" type="text" placeholder="Type district name">
+                    <input id="district" list="district-options" type="text" placeholder="Type district name" autocomplete="off">
                     <datalist id="district-options"></datalist>
                     <p class="field-hint" id="district-hint">
-                        Click a district on the map to auto-fill the nearest model district, or type it manually.
+                        Click a district on the map to auto-fill, or type a valid model district name.
                     </p>
 
                     <label for="season">Season</label>
@@ -95,16 +110,17 @@
                     </select>
 
                     <label for="area">Area (hectares)</label>
-                    <input id="area" type="number" min="0" step="0.1" placeholder="Enter farm area">
+                    <input id="area" type="number" min="0" step="0.1" placeholder="e.g. 2.5">
 
                     <button id="predict-btn" type="button">Predict Crop</button>
                 </div>
 
+                <!-- Results section -->
                 <div class="panel-section result-panel">
                     <div class="section-head compact">
                         <div>
                             <h2>Prediction Results</h2>
-                            <p>Your recommendation will appear here after prediction.</p>
+                            <p>Your recommendation appears here.</p>
                         </div>
                     </div>
 
@@ -115,18 +131,19 @@
                     <div class="results-grid hidden" id="results-grid">
                         <div class="result-card">
                             <span class="result-label">Recommended Crop</span>
-                            <strong id="crop-result">-</strong>
+                            <strong id="crop-result">—</strong>
                         </div>
                         <div class="result-card">
-                            <span class="result-label">Revenue per hectare</span>
-                            <strong id="revenue-hectare-result">-</strong>
+                            <span class="result-label">Revenue / hectare</span>
+                            <strong id="revenue-hectare-result">—</strong>
                         </div>
                         <div class="result-card full-width">
-                            <span class="result-label">Total Revenue</span>
-                            <strong id="total-revenue-result">-</strong>
+                            <span class="result-label">Total Revenue (estimated range)</span>
+                            <strong id="total-revenue-result">—</strong>
                         </div>
                     </div>
                 </div>
+
             </aside>
         </section>
     </main>
