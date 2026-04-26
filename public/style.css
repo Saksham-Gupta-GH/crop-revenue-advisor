@@ -124,11 +124,7 @@ body {
     justify-content: center;
     text-align: center;
     padding: 64px 24px;
-    background-color: var(--surface);
-    background-image:
-        radial-gradient(ellipse 70% 45% at 50% 0%, rgba(230,244,234,0.9) 0%, transparent 65%),
-        radial-gradient(circle, #e8eaed 1px, transparent 1px);
-    background-size: 100% 100%, 28px 28px;
+    background: var(--surface);
 }
 
 .landing-inner { max-width: 640px; }
@@ -192,35 +188,12 @@ body {
     transform: translateY(-2px);
 }
 
-.feature-strip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 36px;
-    animation: fadeUp 0.5s 0.4s ease both;
-}
-
-.feature-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 13px;
+.model-note {
+    margin-top: 32px;
+    font-size: 12px;
     color: var(--text-2);
-    box-shadow: var(--z1);
-}
-
-.feature-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    flex-shrink: 0;
+    letter-spacing: .04em;
+    animation: fadeUp 0.5s 0.4s ease both;
 }
 
 /* ── App layout ── */
