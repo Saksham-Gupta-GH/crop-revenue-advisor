@@ -23,30 +23,30 @@ const currencyFormatter = new Intl.NumberFormat("en-IN", {
 });
 
 const defaultStyle = {
-    color: "#f1f5f9",
+    color: "#dadce0",
     weight: 1,
-    fillColor: "#f8fafc",
+    fillColor: "#f8f9fa",
     fillOpacity: 1,
 };
 
 const unsupportedStyle = {
-    color: "#f8fafc",
+    color: "#f1f3f4",
     weight: 0.8,
     fillColor: "#ffffff",
     fillOpacity: 1,
 };
 
 const hoverStyle = {
-    color: "#cbd5e1",
+    color: "#1e8e3e",
     weight: 1.5,
-    fillColor: "#f1f5f9",
+    fillColor: "#e6f4ea",
     fillOpacity: 1,
 };
 
 const selectedStyle = {
-    color: "#334155",
+    color: "#137333",
     weight: 2,
-    fillColor: "#10b981",
+    fillColor: "#1e8e3e",
     fillOpacity: 0.2,
 };
 

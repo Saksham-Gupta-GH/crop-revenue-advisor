@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart — Advisor</title>
+    <title>AgriSmart — Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -17,93 +17,95 @@
 </head>
 <body>
 
-    <div class="modal" id="about-modal">
-        <button class="modal-close" id="modal-close">×</button>
+    <div class="modal-overlay" id="about-modal">
         <div class="modal-content">
-            <h1>The Technology</h1>
-            <p>AgriSmart is a predictive tool designed to assist in agricultural planning by leveraging historical data and machine learning.</p>
-            <h3>Methodology</h3>
-            <p>Our system analyzes district-level production history, seasonal rainfall variations, and market pricing to identify the most suitable crops for a given area.</p>
+            <button class="modal-close" id="modal-close">×</button>
+            <h2 class="modal-title font-google">About AgriSmart</h2>
+            <div class="modal-body">
+                <p>AgriSmart is a data-driven advisory platform that helps in agricultural decision-making by analyzing historical regional data and market trends.</p>
+                <p style="margin-top: 16px;">Our models provide predictive insights into crop suitability and expected revenue for specific regions across India.</p>
+            </div>
         </div>
     </div>
 
     <nav>
-        <div class="container">
-            <a href="/" class="brand">AgriSmart</a>
-            <div class="nav-links">
-                <button id="about-btn">Technology</button>
-                <a href="/">Home</a>
-            </div>
+        <div class="brand-wrap">
+            <div class="brand-mark">A</div>
+            <div class="brand font-google">Agri<span>Smart</span></div>
+        </div>
+        <div class="nav-actions">
+            <button class="nav-btn" id="about-btn">About</button>
+            <a href="/" class="nav-btn">Home</a>
         </div>
     </nav>
 
-    <main class="container">
-        <section>
-            <div class="app-grid">
+    <main class="app-container">
+        
+        <div class="main-content">
+            <div class="location-chip font-google" id="selected-location">
+                No district selected
+            </div>
+            
+            <div class="card">
+                <div class="card-title font-google">Regional Map</div>
+                <div id="map"></div>
+                <div id="map-status" style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Map status: Initializing</div>
+            </div>
+
+            <div class="card results" style="margin-top: 24px;">
+                <div class="card-title font-google">Analysis Results</div>
+                <div class="message" id="result-message">Provide parameters to generate a prediction.</div>
+
+                <div class="result-grid hidden" id="results-grid" style="margin-top: 20px;">
+                    <div class="result-item">
+                        <span class="result-label">Recommended Crop</span>
+                        <div id="crop-result" class="result-value font-google">—</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Revenue / Hectare</span>
+                        <div id="revenue-hectare-result" class="result-value font-google">—</div>
+                    </div>
+                    <div class="result-item full">
+                        <span class="result-label">Total Projected Revenue</span>
+                        <div id="total-revenue-result" class="result-value font-google">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside>
+            <div class="card">
+                <div class="card-title font-google">Parameters</div>
                 
-                <div class="map-section">
-                    <h2>Region</h2>
-                    <p>Select a district on the map to begin.</p>
-                    
-                    <div id="map"></div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state"></select>
                 </div>
 
-                <div class="sidebar">
-                    <div class="location-bar" id="selected-location">
-                        No district selected.
-                    </div>
-
-                    <div class="form-group">
-                        <label for="state">State</label>
-                        <select id="state"></select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="district">District</label>
-                        <input id="district" list="district-options" type="text" placeholder="Select district" autocomplete="off">
-                        <datalist id="district-options"></datalist>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="season">Season</label>
-                        <select id="season">
-                            <option value="KHARIF">Kharif</option>
-                            <option value="RABI">Rabi</option>
-                            <option value="ZAID">Zaid</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="area">Land Area (Hectares)</label>
-                        <input id="area" type="number" min="0" step="0.1" placeholder="Specify area">
-                    </div>
-
-                    <button id="predict-btn" type="button" class="btn">Generate Analysis</button>
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <input id="district" list="district-options" type="text" placeholder="Select district" autocomplete="off">
+                    <datalist id="district-options"></datalist>
                 </div>
+
+                <div class="form-group">
+                    <label for="season">Season</label>
+                    <select id="season">
+                        <option value="KHARIF">Kharif</option>
+                        <option value="RABI">Rabi</option>
+                        <option value="ZAID">Zaid</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="area">Land Area (Hectares)</label>
+                    <input id="area" type="number" min="0" step="0.1" placeholder="Enter hectares">
+                </div>
+
+                <button id="predict-btn" type="button" class="btn" style="width: 100%;">Generate Analysis</button>
             </div>
+        </aside>
 
-            <div class="results">
-                <h2>Analysis</h2>
-                <div class="message" id="result-message">
-                    Waiting for parameters.
-                </div>
-
-                <div class="result-list hidden" id="results-grid">
-                    <div class="result-item">
-                        <span class="label">Recommended Crop</span>
-                        <div id="crop-result" class="value">—</div>
-                    </div>
-                    <div class="result-item">
-                        <span class="label">Revenue / Hectare</span>
-                        <div id="revenue-hectare-result" class="value">—</div>
-                    </div>
-                    <div class="result-item">
-                        <span class="label">Projected Total Revenue</span>
-                        <div id="total-revenue-result" class="value">—</div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <script

@@ -3,43 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart</title>
+    <title>AgriSmart — Advisory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="modal" id="about-modal">
-        <button class="modal-close" id="modal-close">×</button>
+    <div class="modal-overlay" id="about-modal">
         <div class="modal-content">
-            <h1>The Technology</h1>
-            <p>AgriSmart is a predictive tool designed to assist in agricultural planning by leveraging historical data and machine learning.</p>
-            
-            <h3>Methodology</h3>
-            <p>Our system analyzes district-level production history, seasonal rainfall variations, and market pricing to identify the most suitable crops for a given area.</p>
-
-            <h3>The Models</h3>
-            <p>We utilize a combination of ensemble classification and regression models to provide both crop recommendations and revenue estimations.</p>
+            <button class="modal-close" id="modal-close">×</button>
+            <h2 class="modal-title font-google">About AgriSmart</h2>
+            <div class="modal-body">
+                <p>AgriSmart is a data-driven advisory platform that helps in agricultural decision-making by analyzing historical regional data and market trends.</p>
+                <p style="margin-top: 16px;">Our models are trained on real-world datasets to provide the most accurate crop recommendations and revenue estimates possible for a given district and season.</p>
+            </div>
         </div>
     </div>
 
     <nav>
-        <div class="container">
-            <a href="/" class="brand">AgriSmart</a>
-            <div class="nav-links">
-                <button id="about-btn">Technology</button>
-            </div>
+        <div class="brand-wrap">
+            <div class="brand-mark">A</div>
+            <div class="brand font-google">Agri<span>Smart</span></div>
+        </div>
+        <div class="nav-actions">
+            <button class="nav-btn" id="about-btn">About</button>
         </div>
     </nav>
 
-    <main class="container hero">
-        <section>
-            <h1>Data-driven crop advisory.</h1>
-            <p>A simple tool to help you analyze regional yield potential and project agricultural revenue using machine learning.</p>
-            <a href="/app" class="btn">Get Started</a>
-        </section>
+    <main class="hero">
+        <h1 class="font-google">Predict your harvest with data.</h1>
+        <p>A professional tool for crop recommendation and revenue forecasting powered by machine learning.</p>
+        <a href="/app" class="btn">Get Started</a>
     </main>
 
     <script>
