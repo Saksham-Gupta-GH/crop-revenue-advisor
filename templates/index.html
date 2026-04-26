@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart – Crop Advisor</title>
+    <title>AgriSmart — Crop Advisor</title>
     <meta name="description" content="Recommend the most profitable crop for any Indian district using trained ML models and real agricultural data.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -18,18 +18,88 @@
 </head>
 <body>
 
-    <!-- About panel -->
-    <details class="about-panel">
-        <summary>About</summary>
-        <div class="about-card">
-            <h3>What AgriSmart Does</h3>
-            <p>
-                AgriSmart uses your saved ML models to recommend crops and estimate expected revenue.
-                It supports map-based district selection, manual district entry, and fallback
-                predictions when a district is not directly covered by the model.
-            </p>
+    <!-- About modal (same content on both pages) -->
+    <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-panel">
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+
+            <div class="modal-header">
+                <span class="eyebrow">About This Project</span>
+                <h2 id="modal-title">What is AgriSmart and how does it work?</h2>
+                <p>A plain-language explanation of the problem we tackled, the data we used, and the machine learning behind every recommendation.</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>The Problem</h3>
+                <p>Every season, farmers across India face the same difficult question: which crop should I grow this year? The answer depends on dozens of factors — the district's soil and climate, the growing season, current market prices, and how other farmers in the region have historically performed with each crop.</p>
+                <p>Without reliable data, decisions often rely on habit or word-of-mouth — leading to missed revenue opportunities or outright losses when the wrong crop is chosen for a given region and season.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>The Data We Used</h3>
+                <p>We gathered and merged three real-world datasets covering agricultural activity across Indian states and districts:</p>
+                <ul>
+                    <li><strong>Crop Production Records</strong> — District-level crop production figures spanning multiple decades, sourced from government agricultural databases. These records tell us which crops have historically been grown where, and in what quantities.</li>
+                    <li><strong>Rainfall Statistics</strong> — Seasonal and annual rainfall aggregated by state. Rainfall is one of the strongest predictors of which crops are viable in a given growing season.</li>
+                    <li><strong>Wholesale Market Prices</strong> — Average market prices per crop, used to convert predicted yield into estimated revenue.</li>
+                </ul>
+                <p>All three datasets were cleaned, deduplicated, and merged to calculate average yield per hectare and expected market value for each crop, district, and season combination.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>How the AI Makes Predictions</h3>
+                <p>We trained two separate machine learning models — one to recommend the crop, and one to estimate how much money that crop will generate.</p>
+                <ul>
+                    <li><strong>Crop Classifier (Stacking Ensemble)</strong> — Three base models each independently vote on the best crop for your inputs: a Random Forest, a Gradient Boosting classifier, and an AdaBoost classifier. A meta-model then combines these three votes into a single final recommendation. Stacking outperforms any one model because different algorithms capture different patterns in the data.</li>
+                    <li><strong>Revenue Regressor (Gradient Boosting)</strong> — A separate model predicts the expected revenue per hectare for the recommended crop, based on historical yield and market price data for that district and season. The app shows a plus-or-minus 20% range around this figure to account for natural market volatility.</li>
+                </ul>
+                <p>Both models are pre-trained and stored — predictions run in real time with no retraining needed each time.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>What the Map Shows</h3>
+                <p>The interactive map displays every district in India. Districts rendered in a lighter green shade are directly supported by the trained model, meaning the model has seen sufficient historical data from those locations to make a confident prediction.</p>
+                <p>Grey-tinted districts are not directly covered. In those cases, the app automatically falls back to the nearest supported district and clearly tells you which location's data was used. You can also override this manually by typing any supported district name.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>How to Use It</h3>
+                <div class="modal-steps">
+                    <div class="modal-step">
+                        <span class="step-num">1</span>
+                        <span class="step-text">Click any district on the map. The district and state fields will fill in automatically.</span>
+                    </div>
+                    <div class="modal-step">
+                        <span class="step-num">2</span>
+                        <span class="step-text">Select the growing season: Kharif (monsoon, June to October), Rabi (winter, November to April), or Zaid (summer, April to June).</span>
+                    </div>
+                    <div class="modal-step">
+                        <span class="step-num">3</span>
+                        <span class="step-text">Enter your total farm area in hectares.</span>
+                    </div>
+                    <div class="modal-step">
+                        <span class="step-num">4</span>
+                        <span class="step-text">Click Predict Crop. The recommended crop and estimated revenue range appear within seconds.</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>Limitations</h3>
+                <p>The model is only as accurate as the historical data it was trained on. Districts with sparse historical records may produce less reliable predictions. Market prices fluctuate seasonally, so treat the revenue figure as a planning estimate — not a financial guarantee. For best results, cross-reference the recommendation with local agronomists or extension officers.</p>
+            </div>
         </div>
-    </details>
+    </div>
 
     <!-- Navbar -->
     <nav class="navbar" id="main-nav">
@@ -37,25 +107,24 @@
             <div class="brand-mark">A</div>
             <div class="brand">AgriSmart</div>
         </div>
-        <a class="nav-link" href="/" id="home-link">
-            ← Home
-        </a>
+        <div class="nav-actions">
+            <button class="nav-about-btn" id="about-btn">About this project</button>
+            <a class="nav-link" href="/" id="home-link">&#8592; Home</a>
+        </div>
     </nav>
 
-    <!-- Page -->
+    <!-- Page content -->
     <main class="page-shell">
 
-        <!-- Hero copy -->
         <section class="hero-copy">
             <span class="eyebrow">Crop Recommendation &amp; Revenue Forecast</span>
-            <h1>Choose a district, enter your area,<br>get a clear recommendation instantly.</h1>
+            <h1>Choose a district, enter your area,<br>get a recommendation instantly.</h1>
             <p>
-                AgriSmart uses your trained ML models to recommend a crop and estimate
-                expected revenue per hectare for the selected district and season.
+                AgriSmart uses trained ML models to recommend a crop and estimate
+                expected revenue per hectare for your selected district and season.
             </p>
         </section>
 
-        <!-- Main layout: map + sidebar -->
         <section class="layout">
 
             <!-- Map card -->
@@ -63,9 +132,9 @@
                 <div class="section-head">
                     <div>
                         <h2>Interactive India Map</h2>
-                        <p>Hover to explore · Click a district to select it</p>
+                        <p>Hover to explore &mdash; click a district to select it</p>
                     </div>
-                    <span class="status-pill" id="map-status">Loading map…</span>
+                    <span class="status-pill" id="map-status">Loading map</span>
                 </div>
 
                 <div class="selected-location" id="selected-location">
@@ -75,15 +144,13 @@
                 <div id="map"></div>
 
                 <p class="helper-text">
-                    Districts shown in colour are supported by the trained model.
-                    Greyed-out districts fall back to the nearest supported district.
+                    Highlighted districts are covered by the trained model. Dimmed districts fall back to the nearest supported location.
                 </p>
             </div>
 
             <!-- Sidebar -->
             <aside class="card side-card">
 
-                <!-- Inputs section -->
                 <div class="panel-section">
                     <div class="section-head compact">
                         <div>
@@ -115,7 +182,6 @@
                     <button id="predict-btn" type="button">Predict Crop</button>
                 </div>
 
-                <!-- Results section -->
                 <div class="panel-section result-panel">
                     <div class="section-head compact">
                         <div>
@@ -131,15 +197,15 @@
                     <div class="results-grid hidden" id="results-grid">
                         <div class="result-card">
                             <span class="result-label">Recommended Crop</span>
-                            <strong id="crop-result">—</strong>
+                            <strong id="crop-result">&#8212;</strong>
                         </div>
                         <div class="result-card">
                             <span class="result-label">Revenue / hectare</span>
-                            <strong id="revenue-hectare-result">—</strong>
+                            <strong id="revenue-hectare-result">&#8212;</strong>
                         </div>
                         <div class="result-card full-width">
                             <span class="result-label">Total Revenue (estimated range)</span>
-                            <strong id="total-revenue-result">—</strong>
+                            <strong id="total-revenue-result">&#8212;</strong>
                         </div>
                     </div>
                 </div>
@@ -155,5 +221,20 @@
     ></script>
     <script id="frontend-config" type="application/json">{{ frontend_config | tojson }}</script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+        // Modal logic (UI only)
+        const aboutBtn  = document.getElementById('about-btn');
+        const modal     = document.getElementById('about-modal');
+        const closeBtn  = document.getElementById('modal-close');
+
+        function openModal()  { modal.classList.add('open');    document.body.style.overflow = 'hidden'; }
+        function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+
+        aboutBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
 </body>
 </html>

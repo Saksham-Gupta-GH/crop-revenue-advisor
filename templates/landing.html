@@ -3,135 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart – Crop Revenue Advisor</title>
+    <title>AgriSmart — Crop Revenue Advisor</title>
     <meta name="description" content="AgriSmart uses machine learning to recommend the most profitable crop for your district, season, and land area.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        /* Landing-page-only overrides */
-        .landing-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            height: 64px;
-            background: transparent;
-        }
-        .landing-wordmark {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-        .landing-wordmark .brand-mark {
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            background: #1a73e8;
-            display: grid; place-items: center;
-            color: #fff; font-size: 15px; font-weight: 700;
-            font-family: 'Google Sans', sans-serif;
-        }
-        .landing-wordmark span {
-            font-family: 'Google Sans', sans-serif;
-            font-size: 18px; font-weight: 500; color: #202124;
-        }
-        .divider-dot {
-            display: inline-block;
-            width: 4px; height: 4px;
-            border-radius: 50%;
-            background: #dadce0;
-            margin: 0 14px;
-            vertical-align: middle;
-        }
-        .landing-feature-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 32px;
-            color: #5f6368;
-            font-size: 13px;
-        }
-        .landing-feature-row .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            border: 1px solid #dadce0;
-            background: #f8f9fa;
-            color: #3c4043;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .landing-feature-row .chip::before {
-            font-size: 13px;
-        }
-    </style>
 </head>
 <body class="landing-body">
 
-    <!-- About panel -->
-    <details class="about-panel">
-        <summary>About</summary>
-        <div class="about-card">
-            <h3>About AgriSmart</h3>
-            <p>
-                AgriSmart is a machine learning-based crop recommendation system that helps users
-                choose the most profitable crop for a given district, season, and land area.
-            </p>
-            <p>
-                Built using real-world agricultural datasets covering crop production, rainfall
-                statistics, and market price data across India.
-            </p>
-            <p>
-                A stacking classifier (Random Forest, Gradient Boosting, AdaBoost) predicts the
-                best crop, while a Gradient Boosting regression model estimates expected revenue.
-            </p>
-        </div>
-    </details>
+    <!-- About modal -->
+    <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-panel">
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
 
-    <!-- Top nav (transparent on landing) -->
+            <div class="modal-header">
+                <span class="eyebrow">About This Project</span>
+                <h2 id="modal-title">What is AgriSmart and how does it work?</h2>
+                <p>A plain-language explanation of the problem we tackled, the data we used, and the machine learning behind every recommendation.</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>The Problem</h3>
+                <p>Every season, farmers across India face the same difficult question: which crop should I grow this year? The answer depends on dozens of factors — the district's soil and climate, the growing season, current market prices, and how other farmers in the region have historically performed with each crop.</p>
+                <p>Without reliable data, decisions often rely on habit or word-of-mouth — leading to missed revenue opportunities or outright losses when the wrong crop is chosen for a given region and season.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>The Data We Used</h3>
+                <p>We gathered and merged three real-world datasets covering agricultural activity across Indian states and districts:</p>
+                <ul>
+                    <li><strong>Crop Production Records</strong> — District-level crop production figures spanning multiple decades, sourced from government agricultural databases. These records tell us which crops have historically been grown where, and in what quantities.</li>
+                    <li><strong>Rainfall Statistics</strong> — Seasonal and annual rainfall aggregated by state. Rainfall is one of the strongest predictors of which crops are viable in a given growing season.</li>
+                    <li><strong>Wholesale Market Prices</strong> — Average market prices per crop, used to convert predicted yield into estimated revenue.</li>
+                </ul>
+                <p>All three datasets were cleaned, deduplicated, and merged to calculate average yield per hectare and expected market value for each crop, district, and season combination.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>How the AI Makes Predictions</h3>
+                <p>We trained two separate machine learning models — one to recommend the crop, and one to estimate how much money that crop will generate.</p>
+                <ul>
+                    <li><strong>Crop Classifier (Stacking Ensemble)</strong> — Three base models each independently vote on the best crop for your inputs: a Random Forest, a Gradient Boosting classifier, and an AdaBoost classifier. A meta-model then combines these three votes into a single final recommendation. Stacking outperforms any one model because different algorithms capture different patterns in the data.</li>
+                    <li><strong>Revenue Regressor (Gradient Boosting)</strong> — A separate model predicts the expected revenue per hectare for the recommended crop, based on historical yield and market price data for that district and season. The app shows a plus-or-minus 20% range around this figure to account for natural market volatility.</li>
+                </ul>
+                <p>Both models are pre-trained and stored — predictions run in real time with no retraining needed each time.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>What the Map Shows</h3>
+                <p>The interactive map displays every district in India. Districts rendered in a lighter green shade are directly supported by the trained model, meaning the model has seen sufficient historical data from those locations to make a confident prediction.</p>
+                <p>Grey-tinted districts are not directly covered. In those cases, the app automatically falls back to the nearest supported district and clearly tells you which location's data was used. You can also override this manually by typing any supported district name.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>How to Use It</h3>
+                <div class="modal-steps">
+                    <div class="modal-step">
+                        <span class="step-num">1</span>
+                        <span class="step-text">Click any district on the map. The district and state fields will fill in automatically.</span>
+                    </div>
+                    <div class="modal-step">
+                        <span class="step-num">2</span>
+                        <span class="step-text">Select the growing season: Kharif (monsoon, June to October), Rabi (winter, November to April), or Zaid (summer, April to June).</span>
+                    </div>
+                    <div class="modal-step">
+                        <span class="step-num">3</span>
+                        <span class="step-text">Enter your total farm area in hectares.</span>
+                    </div>
+                    <div class="modal-step">
+                        <span class="step-num">4</span>
+                        <span class="step-text">Click Predict Crop. The recommended crop and estimated revenue range appear within seconds.</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-section">
+                <h3>Limitations</h3>
+                <p>The model is only as accurate as the historical data it was trained on. Districts with sparse historical records may produce less reliable predictions. Market prices fluctuate seasonally, so treat the revenue figure as a planning estimate — not a financial guarantee. For best results, cross-reference the recommendation with local agronomists or extension officers.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav -->
     <nav class="landing-nav">
-        <a class="landing-wordmark" href="/">
+        <div class="brand-wrap" style="text-decoration:none; display:flex; align-items:center; gap:11px;">
             <div class="brand-mark">A</div>
-            <span>AgriSmart</span>
-        </a>
+            <div class="brand">AgriSmart</div>
+        </div>
+        <button class="nav-about-btn" id="about-btn">About this project</button>
     </nav>
 
     <!-- Hero -->
     <main class="landing-shell">
         <section class="landing-card">
-            <span class="eyebrow" style="background:#e8f0fe;border-color:#d2e3fc;color:#1a73e8;">
-                🌾 &nbsp;Powered by ML · Real agricultural data
-            </span>
+            <span class="eyebrow">ML-Powered Crop Advisory</span>
 
-            <h1>
-                Smarter crop decisions,<br>
-                <strong>built from data.</strong>
-            </h1>
+            <h1>Smarter crop decisions,<br><em>built from real data.</em></h1>
 
             <p>
-                Select any district on the interactive India map, enter your farm area
-                and season — get an instant crop recommendation with projected revenue,
-                straight from your trained models.
+                Select any district on the interactive India map, pick your growing season,
+                enter your farm area — and get an instant crop recommendation with a
+                projected revenue range, straight from trained machine learning models.
             </p>
 
-            <!-- Feature chips -->
-            <div class="landing-feature-row">
-                <span class="chip"><span>🗺️</span> Interactive map</span>
-                <span class="divider-dot"></span>
-                <span class="chip"><span>🤖</span> Stacking classifier</span>
-                <span class="divider-dot"></span>
-                <span class="chip"><span>₹</span> Revenue estimate</span>
+            <div class="landing-chips">
+                <span class="chip">Interactive District Map</span>
+                <span class="chip">Stacking Ensemble Model</span>
+                <span class="chip">Revenue Forecast</span>
             </div>
 
-            <a class="landing-button" href="/app" id="open-app-btn">Open AgriSmart</a>
+            <a class="landing-button" href="/app" id="open-app-btn">
+                Open AgriSmart
+                <span class="btn-arrow">&#8594;</span>
+            </a>
         </section>
     </main>
 
+    <script>
+        const aboutBtn  = document.getElementById('about-btn');
+        const modal     = document.getElementById('about-modal');
+        const closeBtn  = document.getElementById('modal-close');
+
+        function openModal()  { modal.classList.add('open');    document.body.style.overflow = 'hidden'; }
+        function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+
+        aboutBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
 </body>
 </html>
