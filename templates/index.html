@@ -16,34 +16,49 @@
     <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-panel">
             <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
-            <h2 class="modal-h2" id="modal-title">About AgriSmart</h2>
-            <p class="modal-lead">A plain-language explanation of the problem we solved, the data we collected, and the machine learning behind every recommendation.</p>
+            <h2 class="modal-h2" id="modal-title">How AgriSmart Works</h2>
+            <p class="modal-lead">Built for farmers who want a clear answer and for engineers who want to understand exactly how that answer was produced.</p>
 
             <div class="modal-sec">
                 <div class="modal-sec-title">The Problem</div>
-                <p>Selecting the wrong crop for a season can mean months of work with little return. Farmers across India often rely on local habit rather than data — leading to missed revenue opportunities. We built AgriSmart to replace guesswork with a model-driven recommendation backed by decades of real agricultural records.</p>
+                <p>Crop selection in India is still largely driven by tradition and word-of-mouth. A farmer who picks the wrong crop for a given district and season can lose an entire season's income. We set out to build a system that turns decades of historical agricultural records into a single, actionable recommendation.</p>
             </div>
 
             <hr class="modal-hr">
 
             <div class="modal-sec">
-                <div class="modal-sec-title">Data Sources</div>
-                <p>Three real-world datasets were cleaned, merged, and used to train the models:</p>
+                <div class="modal-sec-title">Dataset Construction</div>
+                <p>Three public datasets were collected, cleaned, and merged to build the training set:</p>
                 <ul>
-                    <li><strong>Crop Production Records</strong> — District-level production data spanning multiple decades.</li>
-                    <li><strong>Rainfall Statistics</strong> — State-level seasonal rainfall patterns.</li>
-                    <li><strong>Wholesale Market Prices</strong> — Average prices per crop used to convert yield into projected revenue.</li>
+                    <li><strong>District Crop Production (Ministry of Agriculture)</strong> — Crop name, area sown, and production quantity at district level across multiple decades and Indian states.</li>
+                    <li><strong>State-level Rainfall Data (IMD)</strong> — Annual and seasonal rainfall figures used as a climate proxy, since fine-grained district rainfall data is sparse.</li>
+                    <li><strong>Wholesale Market Prices (Agmarknet)</strong> — Average modal prices per crop used to estimate revenue from predicted yield.</li>
                 </ul>
+                <p>After merging on state, district, crop, and season keys, records with missing production or price data were dropped. Average yield (production / area) and expected revenue per hectare were derived as target-adjacent features.</p>
             </div>
 
             <hr class="modal-hr">
 
             <div class="modal-sec">
-                <div class="modal-sec-title">How the AI Works</div>
-                <ul>
-                    <li><strong>Crop Classifier</strong> — A stacking ensemble of Random Forest, Gradient Boosting, and AdaBoost. A meta-model combines their outputs into one recommendation.</li>
-                    <li><strong>Revenue Regressor</strong> — A Gradient Boosting model that estimates expected revenue per hectare, shown as a ±20% range.</li>
-                </ul>
+                <div class="modal-sec-title">Model 1 — Crop Classifier (Stacking Ensemble)</div>
+                <p><strong>What it does:</strong> Given a district, state, season, area, rainfall, and historical yield, it predicts the single most profitable crop to grow.</p>
+                <p><strong>Architecture:</strong> A two-layer stacking classifier. The base layer consists of three independently trained models — Random Forest, Gradient Boosting Classifier, and AdaBoost — each producing probability estimates across all crop classes. These out-of-fold predictions are fed as features to a Logistic Regression meta-learner, which produces the final class output. Stacking was chosen over a single model because each base learner captures different non-linear patterns, and the meta-learner learns how to weight them optimally.</p>
+                <p><strong>Inputs:</strong> State, district (label-encoded), season (label-encoded), land area, average rainfall, average historical yield.</p>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">Model 2 — Revenue Regressor (Gradient Boosting)</div>
+                <p><strong>What it does:</strong> Predicts expected revenue per hectare for the recommended crop in a given district and season.</p>
+                <p><strong>Architecture:</strong> A Gradient Boosting Regressor trained on historical revenue per hectare, calculated from production records and market prices. The model captures non-linear interactions between district, season, crop type, and yield history. The app applies a ±20% band around the point estimate to reflect realistic market price volatility — the actual range users see is not random; it reflects the empirical variance in crop prices observed in the training data.</p>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">Map &amp; Fallback Logic</div>
+                <p>The interactive map is built on Leaflet.js using a district-level GeoJSON of India. Each district polygon is pre-annotated server-side with its nearest matching model district, resolved by string similarity against the training set's district vocabulary. Districts not in the training set fall back to the geographically nearest supported district. You can see exactly which district's data was used in the location strip above the form.</p>
             </div>
 
             <hr class="modal-hr">
@@ -51,10 +66,12 @@
             <div class="modal-sec">
                 <div class="modal-sec-title">How to Use</div>
                 <div class="modal-steps">
-                    <div class="modal-step"><span class="step-n">1</span><span class="step-t">Click any district on the map — state and district fields fill automatically.</span></div>
-                    <div class="modal-step"><span class="step-n">2</span><span class="step-t">Select the growing season: Kharif, Rabi, or Zaid.</span></div>
+                    <div class="modal-step"><span class="step-n">1</span><span class="step-t">Click any district on the map. State and district auto-fill from the GeoJSON annotation.</span></div>
+                    <div class="modal-step"><span class="step-n">2</span><span class="step-t">Select the growing season — Kharif (monsoon, Jun–Oct), Rabi (winter, Nov–Apr), or Zaid (summer, Apr–Jun).</span></div>
                     <div class="modal-step"><span class="step-n">3</span><span class="step-t">Enter your farm area in hectares.</span></div>
-                    <div class="modal-step"><span class="step-n">4</span><span class="step-t">Click Predict Crop — results appear in seconds.</span></div>
+                    <div class="modal-step"><span class="step-n">4</span><span class="step-t">Click Predict Crop. Both models run server-side and return the crop name and revenue estimate within seconds.</span></div>
+                </div>
+            </div>
                 </div>
             </div>
         </div>
