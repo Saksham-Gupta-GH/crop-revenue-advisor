@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart | Predictive Analysis</title>
-    <meta name="description" content="A professional-grade crop recommendation and revenue forecasting platform.">
+    <title>AgriSmart — Advisory Dashboard</title>
+    <meta name="description" content="Agricultural prediction dashboard.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -21,141 +21,121 @@
     <!-- About modal -->
     <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-panel">
-            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
-
+            <button class="modal-close" id="modal-close" aria-label="Close">×</button>
             <div class="modal-header">
-                <span class="eyebrow">Project Overview</span>
-                <h2 id="modal-title">The Science of AgriSmart</h2>
-                <p>An in-depth look at our methodology, data sourcing, and predictive architecture.</p>
+                <h2 id="modal-title" class="font-outfit" style="font-size: 32px; margin-bottom: 8px;">The Science Behind AgriSmart</h2>
+                <p style="font-size: 16px; color: var(--text-muted);">How we use data to empower agricultural decisions.</p>
             </div>
-
-            <div class="modal-section">
-                <h3>The Objective</h3>
-                <p>Agricultural planning in India has historically been guided by tradition and seasonal patterns. However, as climate volatility and market fluctuations increase, farmers require more precise, data-driven insights. AgriSmart was developed to bridge this gap, providing a scientific foundation for crop selection.</p>
-            </div>
-
-            <div class="modal-section">
-                <h3>Data Foundations</h3>
-                <p>Our intelligence is derived from the integration of three primary data streams:</p>
-                <ul>
-                    <li><strong>Historical Production</strong>: District-level data spanning decades to identify regional crop suitability.</li>
-                    <li><strong>Meteorological Trends</strong>: State-level rainfall data to account for seasonal moisture availability.</li>
-                    <li><strong>Economic Indicators</strong>: Wholesale market price indices to project potential revenue.</li>
-                </ul>
-                <p>These disparate sources were normalized and synthesized to create a comprehensive training environment for our models.</p>
-            </div>
-
-            <div class="modal-section">
-                <h3>Predictive Framework</h3>
-                <p>We employ a dual-model architecture to provide both recommendations and financial projections:</p>
-                <ul>
-                    <li><strong>Classification Stack</strong>: A sophisticated ensemble combining Random Forest, Gradient Boosting, and AdaBoost. This "stacking" approach ensures that the final recommendation is the result of consensus among multiple high-performance algorithms.</li>
-                    <li><strong>Revenue Regression</strong>: A Gradient Boosting regressor that calculates expected value per hectare, adjusted for historical yield and current market trends.</li>
-                </ul>
+            <div style="margin-top: 32px; display: grid; gap: 24px;">
+                <div>
+                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">The Vision</h3>
+                    <p>AgriSmart was built to solve a fundamental problem: crop selection risk. By combining decades of historical yield data, seasonal rainfall patterns, and market price volatility, we provide a mathematical foundation for what to plant next.</p>
+                </div>
+                <div>
+                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">Predictive Pipeline</h3>
+                    <p>Our system uses a dual-engine approach: classification for recommendation and regression for revenue forecasting.</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar" id="main-nav">
-        <div class="brand-wrap">
+    <nav class="navbar">
+        <div class="brand-wrap font-outfit">
             <div class="brand-mark">A</div>
-            <div class="brand serif">AgriSmart</div>
+            <span>AgriSmart</span>
         </div>
         <div class="nav-actions">
-            <button class="nav-link serif" style="background:none; border:none; cursor:pointer;" id="about-btn">Overview</button>
-            <a class="nav-link serif" href="/" id="home-link">Back to Home</a>
+            <button class="nav-btn" id="about-btn">Technology</button>
+            <a class="nav-btn" href="/">Home</a>
         </div>
     </nav>
 
-    <main class="page-shell">
+    <main class="bento-grid">
+        
+        <!-- Header Section -->
+        <div class="bento-card span-full" style="padding-bottom: 0; border: none; background: transparent; box-shadow: none;">
+            <h1 class="hero-title">Advisory Dashboard</h1>
+            <p style="color: var(--text-muted); max-width: 600px;">Configure your parameters to generate a crop recommendation and revenue forecast based on regional historical data.</p>
+        </div>
 
-        <section class="hero-copy">
-            <span class="eyebrow">Revenue Forecast Engine</span>
-            <h1>Analyze Regional Potential</h1>
-            <p>
-                Select a geographic region and specify land area to generate a localized crop recommendation and revenue forecast.
-            </p>
-        </section>
-
-        <section class="layout">
-
-            <!-- Map card -->
-            <div class="card map-card">
-                <div class="section-head">
-                    <div>
-                        <h2>Geographic Selection</h2>
-                        <p>Interact with the regional map to select a specific district.</p>
-                    </div>
-                    <span class="status-pill" id="map-status">Initializing Map</span>
+        <!-- Map Section (Main) -->
+        <div class="bento-card span-8">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div>
+                    <h2 class="card-title">Regional Map</h2>
+                    <p class="card-subtitle">Select a district to analyze</p>
                 </div>
-
-                <div class="selected-location" id="selected-location">
-                    No region currently selected.
+                <div class="status-pill">
+                    <div class="status-dot"></div>
+                    <span id="map-status">Live Map</span>
                 </div>
-
-                <div id="map"></div>
-
-                <p class="helper-text serif" style="margin-top:20px; font-style:italic;">
-                    Note: Shaded regions represent areas with validated historical data.
-                </p>
+            </div>
+            
+            <div class="selected-location font-outfit" id="selected-location" style="margin-bottom: 16px; font-weight: 500; color: var(--primary); background: var(--primary-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--primary-soft);">
+                No district selected
             </div>
 
-            <!-- Sidebar -->
-            <aside class="card side-card">
+            <div id="map"></div>
+        </div>
 
-                <div class="panel-section">
-                    <div class="section-head">
-                        <h2>Analysis Inputs</h2>
-                    </div>
+        <!-- Inputs Section -->
+        <div class="bento-card span-4">
+            <h2 class="card-title">Parameters</h2>
+            <p class="card-subtitle" style="margin-bottom: 24px;">Refine your analysis</p>
 
-                    <label for="state">State</label>
-                    <select id="state"></select>
+            <div class="input-group">
+                <label for="state">State</label>
+                <select id="state"></select>
+            </div>
 
-                    <label for="district">District</label>
-                    <input id="district" list="district-options" type="text" placeholder="Specify district" autocomplete="off">
-                    <datalist id="district-options"></datalist>
-                    
-                    <label for="season">Season</label>
-                    <select id="season">
-                        <option value="KHARIF">Kharif</option>
-                        <option value="RABI">Rabi</option>
-                        <option value="ZAID">Zaid</option>
-                    </select>
+            <div class="input-group">
+                <label for="district">District</label>
+                <input id="district" list="district-options" type="text" placeholder="Select district" autocomplete="off">
+                <datalist id="district-options"></datalist>
+            </div>
 
-                    <label for="area">Land Area (Hectares)</label>
-                    <input id="area" type="number" min="0" step="0.1" placeholder="Specify hectares">
+            <div class="input-group">
+                <label for="season">Season</label>
+                <select id="season">
+                    <option value="KHARIF">Kharif</option>
+                    <option value="RABI">Rabi</option>
+                    <option value="ZAID">Zaid</option>
+                </select>
+            </div>
 
-                    <button id="predict-btn" type="button" class="serif">Generate Prediction</button>
+            <div class="input-group">
+                <label for="area">Land Area (Ha)</label>
+                <input id="area" type="number" min="0" step="0.1" placeholder="Specify area">
+            </div>
+
+            <button id="predict-btn" type="button" class="btn-primary">Generate Analysis</button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="bento-card span-full">
+            <h2 class="card-title">Forecast Analysis</h2>
+            <p class="card-subtitle">Predictive model output</p>
+
+            <div class="message-box" id="result-message" style="background: #f1f5f9; padding: 16px; border-radius: 12px; font-size: 14px; margin-bottom: 0;">
+                Waiting for regional parameters...
+            </div>
+
+            <div class="result-grid hidden" id="results-grid" style="margin-top: 24px;">
+                <div class="result-item">
+                    <span class="result-label">Recommended Crop</span>
+                    <strong id="crop-result" class="result-val font-outfit">None</strong>
                 </div>
-
-                <div class="panel-section result-panel">
-                    <div class="section-head">
-                        <h2>Forecast Summary</h2>
-                    </div>
-
-                    <div class="message-box info" id="result-message">
-                        Provide regional data and land area to initiate the analysis.
-                    </div>
-
-                    <div class="results-grid hidden" id="results-grid">
-                        <div class="result-card">
-                            <span class="result-label">Recommended Crop</span>
-                            <strong id="crop-result">None</strong>
-                        </div>
-                        <div class="result-card">
-                            <span class="result-label">Revenue / Hectare</span>
-                            <strong id="revenue-hectare-result">None</strong>
-                        </div>
-                        <div class="result-card" style="grid-column: 1 / -1;">
-                            <span class="result-label">Total Projected Revenue</span>
-                            <strong id="total-revenue-result">None</strong>
-                        </div>
-                    </div>
+                <div class="result-item">
+                    <span class="result-label">Revenue / Hectare</span>
+                    <strong id="revenue-hectare-result" class="result-val font-outfit">None</strong>
                 </div>
+                <div class="result-item" style="grid-column: span 1;">
+                    <span class="result-label">Total Projected Revenue</span>
+                    <strong id="total-revenue-result" class="result-val font-outfit">None</strong>
+                </div>
+            </div>
+        </div>
 
-            </aside>
-        </section>
     </main>
 
     <script

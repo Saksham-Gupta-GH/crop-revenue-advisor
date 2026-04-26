@@ -23,30 +23,30 @@ const currencyFormatter = new Intl.NumberFormat("en-IN", {
 });
 
 const defaultStyle = {
-    color: "#d7ccc0",
+    color: "#e2e8f0",
     weight: 1,
-    fillColor: "#f5eee6",
+    fillColor: "#f1f5f9",
     fillOpacity: 0.6,
 };
 
 const unsupportedStyle = {
-    color: "#e8e0d5",
+    color: "#f1f5f9",
     weight: 0.8,
-    fillColor: "#faf8f3",
+    fillColor: "#f8fafc",
     fillOpacity: 0.4,
 };
 
 const hoverStyle = {
-    color: "#c2410c",
+    color: "#10b981",
     weight: 1.5,
-    fillColor: "#fbbf24",
+    fillColor: "#34d399",
     fillOpacity: 0.4,
 };
 
 const selectedStyle = {
-    color: "#c2410c",
+    color: "#059669",
     weight: 2,
-    fillColor: "#b45309",
+    fillColor: "#10b981",
     fillOpacity: 0.5,
 };
 
@@ -59,7 +59,7 @@ const map = L.map("map", {
     zoomControl: true,
 }).setView([22.5, 79.5], 4.5);
 
-L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
     maxZoom: 18,
 }).addTo(map);

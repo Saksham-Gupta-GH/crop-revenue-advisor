@@ -3,77 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart | Crop Revenue Advisor</title>
-    <meta name="description" content="A premium crop recommendation system built on historical agricultural data and machine learning.">
+    <title>AgriSmart — Intelligent Crop Advisory</title>
+    <meta name="description" content="Predict optimal crops and estimate revenue with machine learning.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="landing-body">
+<body>
 
     <!-- About modal -->
     <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-panel">
-            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+            <button class="modal-close" id="modal-close" aria-label="Close">×</button>
 
             <div class="modal-header">
-                <span class="eyebrow">Project Overview</span>
-                <h2 id="modal-title">The Science of AgriSmart</h2>
-                <p>An in-depth look at our methodology, data sourcing, and predictive architecture.</p>
+                <h2 id="modal-title" class="font-outfit" style="font-size: 32px; margin-bottom: 8px;">The Science Behind AgriSmart</h2>
+                <p style="font-size: 16px; color: var(--text-muted);">How we use data to empower agricultural decisions.</p>
             </div>
 
-            <div class="modal-section">
-                <h3>The Objective</h3>
-                <p>Agricultural planning in India has historically been guided by tradition and seasonal patterns. However, as climate volatility and market fluctuations increase, farmers require more precise, data-driven insights. AgriSmart was developed to bridge this gap, providing a scientific foundation for crop selection.</p>
-            </div>
+            <div style="margin-top: 32px; display: grid; gap: 24px;">
+                <div>
+                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">The Vision</h3>
+                    <p>AgriSmart was built to solve a fundamental problem: crop selection risk. By combining decades of historical yield data, seasonal rainfall patterns, and market price volatility, we provide a mathematical foundation for what to plant next.</p>
+                </div>
 
-            <div class="modal-section">
-                <h3>Data Foundations</h3>
-                <p>Our intelligence is derived from the integration of three primary data streams:</p>
-                <ul>
-                    <li><strong>Historical Production</strong>: District-level data spanning decades to identify regional crop suitability.</li>
-                    <li><strong>Meteorological Trends</strong>: State-level rainfall data to account for seasonal moisture availability.</li>
-                    <li><strong>Economic Indicators</strong>: Wholesale market price indices to project potential revenue.</li>
-                </ul>
-                <p>These disparate sources were normalized and synthesized to create a comprehensive training environment for our models.</p>
-            </div>
+                <div>
+                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">Predictive Pipeline</h3>
+                    <p>Our system uses a dual-engine approach:</p>
+                    <ul style="padding-left: 20px; color: var(--text-muted);">
+                        <li style="margin-bottom: 8px;"><strong style="color: var(--text);">Stacking Ensemble</strong>: We use a multi-layer classifier that weighs predictions from Random Forest, Gradient Boosting, and AdaBoost models to suggest the best-fitting crop.</li>
+                        <li><strong style="color: var(--text);">Revenue Regression</strong>: A secondary model estimates revenue potential based on regional historical yield and adjusted market price indices.</li>
+                    </ul>
+                </div>
 
-            <div class="modal-section">
-                <h3>Predictive Framework</h3>
-                <p>We employ a dual-model architecture to provide both recommendations and financial projections:</p>
-                <ul>
-                    <li><strong>Classification Stack</strong>: A sophisticated ensemble combining Random Forest, Gradient Boosting, and AdaBoost. This "stacking" approach ensures that the final recommendation is the result of consensus among multiple high-performance algorithms.</li>
-                    <li><strong>Revenue Regression</strong>: A Gradient Boosting regressor that calculates expected value per hectare, adjusted for historical yield and current market trends.</li>
-                </ul>
-            </div>
-
-            <div class="modal-section">
-                <h3>Regional Coverage</h3>
-                <p>The interactive map distinguishes between districts with robust historical data and those requiring fallback logic. While our models cover the majority of the subcontinent, some regions utilize data from statistically similar neighboring districts to ensure a prediction is always possible.</p>
+                <div>
+                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">Data Integrity</h3>
+                    <p>We source data from official agricultural records, meteorology departments, and wholesale market boards. All data is cleaned and normalized before being used to train the models stored in this application.</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Nav -->
     <nav class="navbar">
-        <div class="brand-wrap">
+        <div class="brand-wrap font-outfit">
             <div class="brand-mark">A</div>
-            <div class="brand serif">AgriSmart</div>
+            <span>AgriSmart</span>
         </div>
-        <button class="nav-link serif" style="background:none; border:none; cursor:pointer;" id="about-btn">Overview</button>
+        <div class="nav-actions">
+            <button class="nav-btn" id="about-btn">Technology</button>
+        </div>
     </nav>
 
-    <!-- Hero -->
-    <main class="landing-shell">
-        <section class="landing-card">
-            <span class="eyebrow">Agricultural Intelligence</span>
-            <h1>Data-Driven Decisions for the Modern Farmer.</h1>
-            <p>
-                Utilizing historical production records and machine learning ensembles to recommend optimal crops and project regional revenue.
-            </p>
-            <a class="landing-button" href="/app" id="open-app-btn">Explore AgriSmart</a>
-        </section>
+    <main class="hero-section">
+        <div class="hero-pill">Machine Learning Powered</div>
+        <h1 class="hero-title">Predict your next harvest with confidence.</h1>
+        <p class="hero-description">
+            A premium advisory platform for farmers and agricultural analysts. Analyze regional yield potential and market trends in real-time.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center;">
+            <a class="cta-button" href="/app">Launch Advisor</a>
+        </div>
     </main>
 
     <script>
