@@ -3,53 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart — Advisory</title>
+    <title>AgriSmart — Crop Revenue Advisor</title>
+    <meta name="description" content="Data-driven crop recommendations and revenue forecasts powered by machine learning.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="modal-overlay" id="about-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">×</button>
-            <h2 class="modal-title font-google">About AgriSmart</h2>
-            <div class="modal-body">
-                <p>AgriSmart is a data-driven advisory platform that helps in agricultural decision-making by analyzing historical regional data and market trends.</p>
-                <p style="margin-top: 16px;">Our models are trained on real-world datasets to provide the most accurate crop recommendations and revenue estimates possible for a given district and season.</p>
+    <!-- About Modal -->
+    <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-panel">
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+            <h2 class="modal-h2" id="modal-title">About AgriSmart</h2>
+            <p class="modal-lead">A plain-language explanation of the problem we solved, the data we collected, and the machine learning behind every recommendation.</p>
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">The Problem</div>
+                <p>Selecting the wrong crop for a season can mean months of work with little return. Farmers across India often rely on local habit rather than data — leading to missed revenue opportunities. We built AgriSmart to replace guesswork with a model-driven recommendation backed by decades of real agricultural records.</p>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">Data Sources</div>
+                <p>Three real-world datasets were cleaned, merged, and used to train the models:</p>
+                <ul>
+                    <li><strong>Crop Production Records</strong> — District-level production data spanning multiple decades from government agricultural databases.</li>
+                    <li><strong>Rainfall Statistics</strong> — State-level seasonal rainfall, one of the strongest predictors of crop viability.</li>
+                    <li><strong>Wholesale Market Prices</strong> — Average prices per crop used to convert yield into projected revenue.</li>
+                </ul>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">How the AI Works</div>
+                <p>Two machine learning models power every prediction:</p>
+                <ul>
+                    <li><strong>Crop Classifier</strong> — A stacking ensemble of Random Forest, Gradient Boosting, and AdaBoost. Each model votes independently; a meta-model combines their outputs into a single recommendation.</li>
+                    <li><strong>Revenue Regressor</strong> — A Gradient Boosting model that estimates expected revenue per hectare, shown as a ±20% range to account for market variation.</li>
+                </ul>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">How to Use</div>
+                <div class="modal-steps">
+                    <div class="modal-step"><span class="step-n">1</span><span class="step-t">Click any district on the map — state and district fields fill automatically.</span></div>
+                    <div class="modal-step"><span class="step-n">2</span><span class="step-t">Select the growing season: Kharif (monsoon), Rabi (winter), or Zaid (summer).</span></div>
+                    <div class="modal-step"><span class="step-n">3</span><span class="step-t">Enter your farm area in hectares.</span></div>
+                    <div class="modal-step"><span class="step-n">4</span><span class="step-t">Click Predict Crop — results appear in seconds.</span></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <nav>
-        <div class="brand-wrap">
-            <div class="brand-mark">A</div>
-            <div class="brand font-google">Agri<span>Smart</span></div>
-        </div>
-        <div class="nav-actions">
-            <button class="nav-btn" id="about-btn">About</button>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="brand">
+            <div class="brand-icon">A</div>
+            <span class="brand-name">AgriSmart</span>
+        </a>
+        <div class="nav-row">
+            <button class="btn-text" id="about-btn">About</button>
         </div>
     </nav>
 
-    <main class="hero">
-        <h1 class="font-google">Predict your harvest with data.</h1>
-        <p>A professional tool for crop recommendation and revenue forecasting powered by machine learning.</p>
-        <a href="/app" class="btn">Get Started</a>
+    <!-- Hero -->
+    <main class="landing-hero">
+        <div class="landing-inner">
+            <div class="landing-chip">ML-Powered Crop Advisory</div>
+            <h1 class="landing-h1">Predict your best crop.<br>Estimate your revenue.</h1>
+            <p class="landing-sub">AgriSmart uses trained machine learning models to recommend the most profitable crop for any Indian district, season, and farm area — in seconds.</p>
+            <a href="/app" class="landing-cta" id="open-app-btn">Open AgriSmart</a>
+        </div>
     </main>
 
     <script>
-        const aboutBtn  = document.getElementById('about-btn');
-        const modal     = document.getElementById('about-modal');
-        const closeBtn  = document.getElementById('modal-close');
-
-        function openModal()  { modal.classList.add('open');    document.body.style.overflow = 'hidden'; }
-        function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
-
-        aboutBtn.addEventListener('click', openModal);
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        const aboutBtn = document.getElementById('about-btn');
+        const modal    = document.getElementById('about-modal');
+        const closeBtn = document.getElementById('modal-close');
+        const open  = () => { modal.classList.add('open');    document.body.style.overflow = 'hidden'; };
+        const close = () => { modal.classList.remove('open'); document.body.style.overflow = ''; };
+        aboutBtn.addEventListener('click', open);
+        closeBtn.addEventListener('click', close);
+        modal.addEventListener('click', e => { if (e.target === modal) close(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     </script>
 </body>
 </html>

@@ -3,131 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart — Dashboard</title>
+    <title>AgriSmart — Advisory Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-        crossorigin=""
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="modal-overlay" id="about-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">×</button>
-            <h2 class="modal-title font-google">About AgriSmart</h2>
-            <div class="modal-body">
-                <p>AgriSmart is a data-driven advisory platform that helps in agricultural decision-making by analyzing historical regional data and market trends.</p>
-                <p style="margin-top: 16px;">Our models provide predictive insights into crop suitability and expected revenue for specific regions across India.</p>
+    <!-- About Modal -->
+    <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-panel">
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+            <h2 class="modal-h2" id="modal-title">About AgriSmart</h2>
+            <p class="modal-lead">A plain-language explanation of the problem we solved, the data we collected, and the machine learning behind every recommendation.</p>
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">The Problem</div>
+                <p>Selecting the wrong crop for a season can mean months of work with little return. Farmers across India often rely on local habit rather than data — leading to missed revenue opportunities. We built AgriSmart to replace guesswork with a model-driven recommendation backed by decades of real agricultural records.</p>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">Data Sources</div>
+                <p>Three real-world datasets were cleaned, merged, and used to train the models:</p>
+                <ul>
+                    <li><strong>Crop Production Records</strong> — District-level production data spanning multiple decades.</li>
+                    <li><strong>Rainfall Statistics</strong> — State-level seasonal rainfall patterns.</li>
+                    <li><strong>Wholesale Market Prices</strong> — Average prices per crop used to convert yield into projected revenue.</li>
+                </ul>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">How the AI Works</div>
+                <ul>
+                    <li><strong>Crop Classifier</strong> — A stacking ensemble of Random Forest, Gradient Boosting, and AdaBoost. A meta-model combines their outputs into one recommendation.</li>
+                    <li><strong>Revenue Regressor</strong> — A Gradient Boosting model that estimates expected revenue per hectare, shown as a ±20% range.</li>
+                </ul>
+            </div>
+
+            <hr class="modal-hr">
+
+            <div class="modal-sec">
+                <div class="modal-sec-title">How to Use</div>
+                <div class="modal-steps">
+                    <div class="modal-step"><span class="step-n">1</span><span class="step-t">Click any district on the map — state and district fields fill automatically.</span></div>
+                    <div class="modal-step"><span class="step-n">2</span><span class="step-t">Select the growing season: Kharif, Rabi, or Zaid.</span></div>
+                    <div class="modal-step"><span class="step-n">3</span><span class="step-t">Enter your farm area in hectares.</span></div>
+                    <div class="modal-step"><span class="step-n">4</span><span class="step-t">Click Predict Crop — results appear in seconds.</span></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <nav>
-        <div class="brand-wrap">
-            <div class="brand-mark">A</div>
-            <div class="brand font-google">Agri<span>Smart</span></div>
-        </div>
-        <div class="nav-actions">
-            <button class="nav-btn" id="about-btn">About</button>
-            <a href="/" class="nav-btn">Home</a>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="brand">
+            <div class="brand-icon">A</div>
+            <span class="brand-name">AgriSmart</span>
+        </a>
+        <div class="nav-row">
+            <button class="btn-text" id="about-btn">About</button>
+            <a href="/" class="btn-text" id="home-link">Home</a>
         </div>
     </nav>
 
-    <main class="app-container">
-        
-        <div class="main-content">
-            <div class="location-chip font-google" id="selected-location">
-                No district selected
-            </div>
-            
-            <div class="card">
-                <div class="card-title font-google">Regional Map</div>
-                <div id="map"></div>
-                <div id="map-status" style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Map status: Initializing</div>
-            </div>
+    <!-- App Layout -->
+    <div class="app-layout">
 
-            <div class="card results" style="margin-top: 24px;">
-                <div class="card-title font-google">Analysis Results</div>
-                <div class="message" id="result-message">Provide parameters to generate a prediction.</div>
-
-                <div class="result-grid hidden" id="results-grid" style="margin-top: 20px;">
-                    <div class="result-item">
-                        <span class="result-label">Recommended Crop</span>
-                        <div id="crop-result" class="result-value font-google">—</div>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Revenue / Hectare</span>
-                        <div id="revenue-hectare-result" class="result-value font-google">—</div>
-                    </div>
-                    <div class="result-item full">
-                        <span class="result-label">Total Projected Revenue</span>
-                        <div id="total-revenue-result" class="result-value font-google">—</div>
-                    </div>
+        <!-- Map Column -->
+        <div class="map-card">
+            <div class="map-card-head">
+                <div>
+                    <div class="map-card-title">India District Map</div>
+                    <div class="map-card-sub">Click a district to select it</div>
+                </div>
+                <div class="map-status-wrap">
+                    <div class="map-dot"></div>
+                    <span id="map-status">Loading</span>
                 </div>
             </div>
+            <div id="map"></div>
+            <div class="map-foot">Shaded districts are covered by the trained model. Others use the nearest supported district as fallback.</div>
         </div>
 
-        <aside>
+        <!-- Sidebar Column -->
+        <div class="sidebar">
+
+            <!-- Selected location -->
             <div class="card">
-                <div class="card-title font-google">Parameters</div>
-                
-                <div class="form-group">
-                    <label for="state">State</label>
-                    <select id="state"></select>
+                <div class="loc-strip" id="selected-location">
+                    <div class="loc-dot"></div>
+                    No district selected
                 </div>
-
-                <div class="form-group">
-                    <label for="district">District</label>
-                    <input id="district" list="district-options" type="text" placeholder="Select district" autocomplete="off">
-                    <datalist id="district-options"></datalist>
-                </div>
-
-                <div class="form-group">
-                    <label for="season">Season</label>
-                    <select id="season">
-                        <option value="KHARIF">Kharif</option>
-                        <option value="RABI">Rabi</option>
-                        <option value="ZAID">Zaid</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="area">Land Area (Hectares)</label>
-                    <input id="area" type="number" min="0" step="0.1" placeholder="Enter hectares">
-                </div>
-
-                <button id="predict-btn" type="button" class="btn" style="width: 100%;">Generate Analysis</button>
             </div>
-        </aside>
 
-    </main>
+            <!-- Inputs card -->
+            <div class="card">
+                <div class="card-head">
+                    <h2 class="card-title">Prediction Inputs</h2>
+                    <p class="card-sub">Pick from the map or type a district manually</p>
+                </div>
+                <div class="card-body">
+                    <div class="field">
+                        <label for="state">State</label>
+                        <select id="state"></select>
+                    </div>
+                    <div class="field">
+                        <label for="district">District</label>
+                        <input id="district" list="district-options" type="text" placeholder="Type district name" autocomplete="off">
+                        <datalist id="district-options"></datalist>
+                        <p class="hint" id="district-hint">Click the map to auto-fill, or type a model district name.</p>
+                    </div>
+                    <div class="field">
+                        <label for="season">Growing Season</label>
+                        <select id="season">
+                            <option value="KHARIF">Kharif (Monsoon)</option>
+                            <option value="RABI">Rabi (Winter)</option>
+                            <option value="ZAID">Zaid (Summer)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="area">Land Area (Hectares)</label>
+                        <input id="area" type="number" min="0" step="0.1" placeholder="e.g. 2.5">
+                    </div>
+                    <button id="predict-btn" type="button" class="btn-filled" style="margin-top:8px;">Predict Crop</button>
+                </div>
+            </div>
 
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""
-    ></script>
+            <!-- Results card -->
+            <div class="card">
+                <div class="card-head">
+                    <h2 class="card-title">Forecast Results</h2>
+                    <p class="card-sub">ML model output for your selected region</p>
+                </div>
+                <div class="card-body">
+                    <div class="message-box info" id="result-message">
+                        Select a district and enter an area to get started.
+                    </div>
+                    <div class="results-grid hidden" id="results-grid">
+                        <div class="result-tile">
+                            <span class="result-label">Recommended Crop</span>
+                            <span id="crop-result" class="result-value">&#8212;</span>
+                        </div>
+                        <div class="result-tile">
+                            <span class="result-label">Revenue / Hectare</span>
+                            <span id="revenue-hectare-result" class="result-value">&#8212;</span>
+                        </div>
+                        <div class="result-tile wide">
+                            <span class="result-label">Total Revenue (estimated range)</span>
+                            <span id="total-revenue-result" class="result-value">&#8212;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /sidebar -->
+    </div><!-- /app-layout -->
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script id="frontend-config" type="application/json">{{ frontend_config | tojson }}</script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-
     <script>
-        const aboutBtn  = document.getElementById('about-btn');
-        const modal     = document.getElementById('about-modal');
-        const closeBtn  = document.getElementById('modal-close');
-
-        function openModal()  { modal.classList.add('open');    document.body.style.overflow = 'hidden'; }
-        function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
-
-        aboutBtn.addEventListener('click', openModal);
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        const aboutBtn = document.getElementById('about-btn');
+        const modal    = document.getElementById('about-modal');
+        const closeBtn = document.getElementById('modal-close');
+        const open  = () => { modal.classList.add('open');    document.body.style.overflow = 'hidden'; };
+        const close = () => { modal.classList.remove('open'); document.body.style.overflow = ''; };
+        aboutBtn.addEventListener('click', open);
+        closeBtn.addEventListener('click', close);
+        modal.addEventListener('click', e => { if (e.target === modal) close(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     </script>
 </body>
 </html>
