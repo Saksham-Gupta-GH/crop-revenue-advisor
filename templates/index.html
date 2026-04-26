@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSmart — Advisory Dashboard</title>
-    <meta name="description" content="Agricultural prediction dashboard.">
+    <title>AgriSmart — Advisor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -18,124 +17,93 @@
 </head>
 <body>
 
-    <!-- About modal -->
-    <div class="modal-overlay" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-panel">
-            <button class="modal-close" id="modal-close" aria-label="Close">×</button>
-            <div class="modal-header">
-                <h2 id="modal-title" class="font-outfit" style="font-size: 32px; margin-bottom: 8px;">The Science Behind AgriSmart</h2>
-                <p style="font-size: 16px; color: var(--text-muted);">How we use data to empower agricultural decisions.</p>
-            </div>
-            <div style="margin-top: 32px; display: grid; gap: 24px;">
-                <div>
-                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">The Vision</h3>
-                    <p>AgriSmart was built to solve a fundamental problem: crop selection risk. By combining decades of historical yield data, seasonal rainfall patterns, and market price volatility, we provide a mathematical foundation for what to plant next.</p>
-                </div>
-                <div>
-                    <h3 class="font-outfit text-primary" style="font-size: 18px; margin-bottom: 8px;">Predictive Pipeline</h3>
-                    <p>Our system uses a dual-engine approach: classification for recommendation and regression for revenue forecasting.</p>
-                </div>
-            </div>
+    <div class="modal" id="about-modal">
+        <button class="modal-close" id="modal-close">×</button>
+        <div class="modal-content">
+            <h1>The Technology</h1>
+            <p>AgriSmart is a predictive tool designed to assist in agricultural planning by leveraging historical data and machine learning.</p>
+            <h3>Methodology</h3>
+            <p>Our system analyzes district-level production history, seasonal rainfall variations, and market pricing to identify the most suitable crops for a given area.</p>
         </div>
     </div>
 
-    <nav class="navbar">
-        <div class="brand-wrap font-outfit">
-            <div class="brand-mark">A</div>
-            <span>AgriSmart</span>
-        </div>
-        <div class="nav-actions">
-            <button class="nav-btn" id="about-btn">Technology</button>
-            <a class="nav-btn" href="/">Home</a>
+    <nav>
+        <div class="container">
+            <a href="/" class="brand">AgriSmart</a>
+            <div class="nav-links">
+                <button id="about-btn">Technology</button>
+                <a href="/">Home</a>
+            </div>
         </div>
     </nav>
 
-    <main class="bento-grid">
-        
-        <!-- Header Section -->
-        <div class="bento-card span-full" style="padding-bottom: 0; border: none; background: transparent; box-shadow: none;">
-            <h1 class="hero-title">Advisory Dashboard</h1>
-            <p style="color: var(--text-muted); max-width: 600px;">Configure your parameters to generate a crop recommendation and revenue forecast based on regional historical data.</p>
-        </div>
-
-        <!-- Map Section (Main) -->
-        <div class="bento-card span-8">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                <div>
-                    <h2 class="card-title">Regional Map</h2>
-                    <p class="card-subtitle">Select a district to analyze</p>
+    <main class="container">
+        <section>
+            <div class="app-grid">
+                
+                <div class="map-section">
+                    <h2>Region</h2>
+                    <p>Select a district on the map to begin.</p>
+                    
+                    <div id="map"></div>
                 </div>
-                <div class="status-pill">
-                    <div class="status-dot"></div>
-                    <span id="map-status">Live Map</span>
-                </div>
-            </div>
-            
-            <div class="selected-location font-outfit" id="selected-location" style="margin-bottom: 16px; font-weight: 500; color: var(--primary); background: var(--primary-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--primary-soft);">
-                No district selected
-            </div>
 
-            <div id="map"></div>
-        </div>
+                <div class="sidebar">
+                    <div class="location-bar" id="selected-location">
+                        No district selected.
+                    </div>
 
-        <!-- Inputs Section -->
-        <div class="bento-card span-4">
-            <h2 class="card-title">Parameters</h2>
-            <p class="card-subtitle" style="margin-bottom: 24px;">Refine your analysis</p>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state"></select>
+                    </div>
 
-            <div class="input-group">
-                <label for="state">State</label>
-                <select id="state"></select>
-            </div>
+                    <div class="form-group">
+                        <label for="district">District</label>
+                        <input id="district" list="district-options" type="text" placeholder="Select district" autocomplete="off">
+                        <datalist id="district-options"></datalist>
+                    </div>
 
-            <div class="input-group">
-                <label for="district">District</label>
-                <input id="district" list="district-options" type="text" placeholder="Select district" autocomplete="off">
-                <datalist id="district-options"></datalist>
-            </div>
+                    <div class="form-group">
+                        <label for="season">Season</label>
+                        <select id="season">
+                            <option value="KHARIF">Kharif</option>
+                            <option value="RABI">Rabi</option>
+                            <option value="ZAID">Zaid</option>
+                        </select>
+                    </div>
 
-            <div class="input-group">
-                <label for="season">Season</label>
-                <select id="season">
-                    <option value="KHARIF">Kharif</option>
-                    <option value="RABI">Rabi</option>
-                    <option value="ZAID">Zaid</option>
-                </select>
-            </div>
+                    <div class="form-group">
+                        <label for="area">Land Area (Hectares)</label>
+                        <input id="area" type="number" min="0" step="0.1" placeholder="Specify area">
+                    </div>
 
-            <div class="input-group">
-                <label for="area">Land Area (Ha)</label>
-                <input id="area" type="number" min="0" step="0.1" placeholder="Specify area">
-            </div>
-
-            <button id="predict-btn" type="button" class="btn-primary">Generate Analysis</button>
-        </div>
-
-        <!-- Results Section -->
-        <div class="bento-card span-full">
-            <h2 class="card-title">Forecast Analysis</h2>
-            <p class="card-subtitle">Predictive model output</p>
-
-            <div class="message-box" id="result-message" style="background: #f1f5f9; padding: 16px; border-radius: 12px; font-size: 14px; margin-bottom: 0;">
-                Waiting for regional parameters...
-            </div>
-
-            <div class="result-grid hidden" id="results-grid" style="margin-top: 24px;">
-                <div class="result-item">
-                    <span class="result-label">Recommended Crop</span>
-                    <strong id="crop-result" class="result-val font-outfit">None</strong>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Revenue / Hectare</span>
-                    <strong id="revenue-hectare-result" class="result-val font-outfit">None</strong>
-                </div>
-                <div class="result-item" style="grid-column: span 1;">
-                    <span class="result-label">Total Projected Revenue</span>
-                    <strong id="total-revenue-result" class="result-val font-outfit">None</strong>
+                    <button id="predict-btn" type="button" class="btn">Generate Analysis</button>
                 </div>
             </div>
-        </div>
 
+            <div class="results">
+                <h2>Analysis</h2>
+                <div class="message" id="result-message">
+                    Waiting for parameters.
+                </div>
+
+                <div class="result-list hidden" id="results-grid">
+                    <div class="result-item">
+                        <span class="label">Recommended Crop</span>
+                        <div id="crop-result" class="value">—</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Revenue / Hectare</span>
+                        <div id="revenue-hectare-result" class="value">—</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Projected Total Revenue</span>
+                        <div id="total-revenue-result" class="value">—</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script

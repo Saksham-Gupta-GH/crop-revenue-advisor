@@ -23,31 +23,31 @@ const currencyFormatter = new Intl.NumberFormat("en-IN", {
 });
 
 const defaultStyle = {
-    color: "#e2e8f0",
+    color: "#f1f5f9",
     weight: 1,
-    fillColor: "#f1f5f9",
-    fillOpacity: 0.6,
+    fillColor: "#f8fafc",
+    fillOpacity: 1,
 };
 
 const unsupportedStyle = {
-    color: "#f1f5f9",
+    color: "#f8fafc",
     weight: 0.8,
-    fillColor: "#f8fafc",
-    fillOpacity: 0.4,
+    fillColor: "#ffffff",
+    fillOpacity: 1,
 };
 
 const hoverStyle = {
-    color: "#10b981",
+    color: "#cbd5e1",
     weight: 1.5,
-    fillColor: "#34d399",
-    fillOpacity: 0.4,
+    fillColor: "#f1f5f9",
+    fillOpacity: 1,
 };
 
 const selectedStyle = {
-    color: "#059669",
+    color: "#334155",
     weight: 2,
     fillColor: "#10b981",
-    fillOpacity: 0.5,
+    fillOpacity: 0.2,
 };
 
 let selectedLayer = null;
